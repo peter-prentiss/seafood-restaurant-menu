@@ -1,5 +1,6 @@
 {
   "name": "catch-of-the-day",
+  "author": "Peter Prentiss",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
