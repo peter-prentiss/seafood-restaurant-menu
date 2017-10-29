@@ -5,6 +5,7 @@ import Inventory from './Inventory';
 import Fish from './Fish';
 import sampleFishes from '../sample-fishes';
 import base from '../base';
+import PropTypes from 'prop-types';
 
 class App extends React.Component {
   constructor() {
@@ -110,7 +111,7 @@ class App extends React.Component {
         <Order
           fishes={this.state.fishes}
           order={this.state.order}
-          params={this.props.params}
+          params={this.props.match.params}
           removeFromOrder={this.removeFromOrder}
         />
         <Inventory
@@ -123,6 +124,10 @@ class App extends React.Component {
       </div>
     )
   }
+}
+
+App.propTypes = {
+  match: PropTypes.object.isRequired
 }
 
 export default App;

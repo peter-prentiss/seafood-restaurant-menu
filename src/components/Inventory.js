@@ -1,17 +1,55 @@
 import React, { Component } from 'react';
 import AddFishForm from './AddFishForm';
+import PropTypes from 'prop-types';
+import base from '../base';
+import Firebase from 'firebase'
+
+var github = new Firebase.auth.GithubAuthProvider();
+github.addScope('repo');
+var facebook = new Firebase.auth.FacebookAuthProvider();
+facebook.addScope('user_birthday');
+var twitter = new Firebase.auth.TwitterAuthProvider();
+var google = new Firebase.auth.GoogleAuthProvider();
+google.addScope('https://www.googleapis.com/auth/plus.login');
 
 class Inventory extends Component {
   constructor() {
     super();
     this.renderInventory = this.renderInventory.bind(this);
+    this.renderLogin = this.renderLogin.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.authenticate = this.authenticate.bind(this);
+    this.state = {
+      uid: null,
+      owner: null
+    }
   }
 
   handleChange(e, key) {
     const fish = this.props.fishes[key];
     const updatedFish = {...fish, [e.target.name]: e.target.value}
     this.props.updateFish(key, updatedFish);
+  }
+
+  authenticate(provider) {
+    Firebase.auth().signInWithPopup(provider).then(function(authData) {
+    	console.log(authData);
+    }).catch(function(error) {
+    	console.log(error);
+    });
+  }
+
+  renderLogin() {
+    return (
+      <nav className="login">
+        <h2>Inventory</h2>
+        <p>Sign in to manage your store's inventory</p>
+        <button className="github" onClick={() => this.authenticate(github)}>Log In with GitHub</button>
+        <button className="facebook" onClick={() => this.authenticate(facebook)}>Log In with Facebook</button>
+        <button className="twitter" onClick={() => this.authenticate(twitter)}>Log In with Twitter</button>
+        <button className="google" onClick={() => this.authenticate(google)}>Log In with Google</button>
+      </nav>
+    )
   }
 
   renderInventory(key) {
@@ -33,15 +71,41 @@ class Inventory extends Component {
   }
 
   render() {
+    const logout = <button>Log Out!</button>
+
+    // Check to see if user is logged in
+    if(!this.state.uid) {
+      return <div>{this.renderLogin()}</div>
+    }
+
+    // Check if user is owner of current store
+    if(this.state.uid !== this.state.owner) {
+      return (
+        <div>
+          <p>Sorry, you aren't the owner of this store!</p>
+          {logout}
+        </div>
+      )
+    }
+
     return (
       <div>
         <h2>Inventory</h2>
+        {logout}
         {Object.keys(this.props.fishes).map(this.renderInventory)}
         <AddFishForm addFish={this.props.addFish} />
         <button onClick={this.props.loadSamples}>Load Sample Fishes</button>
       </div>
     )
   }
+}
+
+Inventory.propTypes = {
+  addFish: PropTypes.func.isRequired,
+  updateFish: PropTypes.func.isRequired,
+  removeFish: PropTypes.func.isRequired,
+  loadSamples: PropTypes.func.isRequired,
+  fishes: PropTypes.object.isRequired
 }
 
 export default Inventory;

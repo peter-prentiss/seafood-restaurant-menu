@@ -28,7 +28,7 @@ class StorePicker extends Component {
 }
 
 StorePicker.propTypes = {
-  router: PropTypes.object
+  history: PropTypes.object
 }
 
 export default StorePicker;
