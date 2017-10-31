@@ -33,9 +33,24 @@ class Inventory extends Component {
 
   authenticate(provider) {
     Firebase.auth().signInWithPopup(provider).then(function(authData) {
-    	console.log(authData);
+      console.log(authData);
+      const storeRef = Firebase.database().ref(this.props.storeId);
+      storeRef.once('value', (snapshot) => {
+        const data = snapshot.val() || {};
+
+        if(!data.owner) {
+          storeRef.set({
+            owner: authData.user.uid
+          });
+        }
+
+        this.setState({
+          uid: authData.user.uid,
+          owner: data.owner || authData.user.uid
+        })
+      })
     }).catch(function(error) {
-    	console.log(error);
+    	console.error(error);
     });
   }
 
@@ -105,7 +120,8 @@ Inventory.propTypes = {
   updateFish: PropTypes.func.isRequired,
   removeFish: PropTypes.func.isRequired,
   loadSamples: PropTypes.func.isRequired,
-  fishes: PropTypes.object.isRequired
+  fishes: PropTypes.object.isRequired,
+  storeId: PropTypes.string.isRequired
 }
 
 export default Inventory;

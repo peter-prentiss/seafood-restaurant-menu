@@ -120,6 +120,7 @@ class App extends React.Component {
           loadSamples={this.loadSamples}
           fishes={this.state.fishes}
           updateFish={this.updateFish}
+          storeId={this.props.match.params.storeId}
         />
       </div>
     )
