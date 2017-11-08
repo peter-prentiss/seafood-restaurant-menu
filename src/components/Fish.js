@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { formatPrice } from '../helpers';
-import PropTypes from 'prop-types';
 
-class Fish extends Component {
+class Fish extends React.Component {
   render() {
     const { details, index } = this.props;
-    const isAvailable = details.status ==='available';
+    const isAvailable = details.status === 'available';
     const buttonText = isAvailable ? 'Add To Order' : 'Sold Out!';
-    return(
+    return (
       <li className="menu-fish">
         <img src={details.image} alt={details.name} />
         <h3 className="fish-name">
@@ -22,9 +21,9 @@ class Fish extends Component {
 }
 
 Fish.propTypes = {
-  addToOrder: PropTypes.func.isRequired,
-  details: PropTypes.object.isRequired,
-  index: PropTypes.string.isRequired
-}
+  details: React.PropTypes.object.isRequired,
+  index: React.PropTypes.string.isRequired,
+  addToOrder: React.PropTypes.func.isRequired
+};
 
 export default Fish;

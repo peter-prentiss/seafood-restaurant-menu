@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { formatPrice } from '../helpers';
-import CSSTransitionGroup from 'react-addons-transition-group';
-import PropTypes from 'prop-types';
+import CSSTransitionGroup from 'react-addons-css-transition-group';
 
-class Order extends Component {
+class Order extends React.Component {
   constructor() {
     super();
     this.renderOrder = this.renderOrder.bind(this);
@@ -73,9 +72,9 @@ class Order extends Component {
 }
 
 Order.propTypes = {
-  fishes: PropTypes.object.isRequired,
-  order: PropTypes.object.isRequired,
-  removeFromOrder: PropTypes.func.isRequired,
+  fishes: React.PropTypes.object.isRequired,
+  order: React.PropTypes.object.isRequired,
+  removeFromOrder: React.PropTypes.func.isRequired,
 };
 
 export default Order;
